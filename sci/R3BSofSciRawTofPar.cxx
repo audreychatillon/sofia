@@ -9,7 +9,11 @@
 
 #include <iostream>
 
+#ifdef NUMBER_OF_SOFSCI_TOF
 #define MAX_RAWTOFPAR NUMBER_OF_SOFSCI_DETECTORS * NUMBER_OF_SOFSCI_TOF
+#else
+#define MAX_RAWTOFPAR 0
+#endif
 
 using std::cout;
 using std::endl;

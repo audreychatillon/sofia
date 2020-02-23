@@ -43,7 +43,11 @@ R3BSofSciTcal2RawTofPar::R3BSofSciTcal2RawTofPar()
   : FairTask("R3BSofSciTcal2RawTofPar",1)
   , fFirstStaSci(1)
   , fFirstStoSci(NUMBER_OF_SOFSCI_DETECTORS)
+#ifdef NUMBER_OF_SOFSCI_TOF
   , fNumSignals(NUMBER_OF_SOFSCI_TOF)
+#else
+  , fNumSignals(0)
+#endif
   , fNumParsPerSignal(2)
   , fMinStatistics(0)
   , fTcal(NULL)
@@ -55,7 +59,13 @@ R3BSofSciTcal2RawTofPar::R3BSofSciTcal2RawTofPar()
 //R3BSofSciTcal2RawTofPar: Standard Constructor --------------------------
 R3BSofSciTcal2RawTofPar::R3BSofSciTcal2RawTofPar(const char* name, Int_t iVerbose) 
   : FairTask(name, iVerbose)
+  , fFirstStaSci(1)
+  , fFirstStoSci(NUMBER_OF_SOFSCI_DETECTORS)
+#ifdef NUMBER_OF_SOFSCI_TOF
   , fNumSignals(NUMBER_OF_SOFSCI_TOF)
+#else
+  , fNumSignals(0)
+#endif
   , fNumParsPerSignal(2)
   , fMinStatistics(0)
   , fTcal(NULL)
@@ -116,7 +126,7 @@ InitStatus R3BSofSciTcal2RawTofPar::Init() {
       rank++;
     }
   }
-  if(rank!=NUMBER_OF_SOFSCI_TOF)
+  if(rank!=fNumSignals)
     LOG(ERROR) << "R3BSofSciTcal2RawTofPar::Init() error in the number of RawTof declaration";
   
   return kSUCCESS;

@@ -56,9 +56,15 @@ class R3BSofSciTcal2RawTofPar : public FairTask {
 
   void SetFirstStaSci(Int_t firststa)     {fFirstStaSci=firststa;}
   void SetFirstStoSci(Int_t firststo)     {fFirstStoSci=firststo;}
-  void SetNumSignals()                 {fNumSignals=NUMBER_OF_SOFSCI_TOF;}
   void SetNumParsPerSignal(Int_t n)    {fNumParsPerSignal=n;}
   void SetMinStatistics(Int_t minstat) {fMinStatistics=minstat;}
+  void SetNumSignals(){
+#ifdef NUMBER_OF_SOFSCI_TOF
+    fNumSignals=NUMBER_OF_SOFSCI_TOF;
+#else
+    fNumSignals=0;
+#endif
+  }
  protected:
   Int_t fFirstStaSci;
   Int_t fFirstStoSci;
