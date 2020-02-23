@@ -22,7 +22,9 @@
 
 #define NbDetectors NUMBER_OF_SOFSCI_DETECTORS
 #define NbChannels  NUMBER_OF_SOFSCI_CHANNELS
+#ifdef NUMBER_OF_SOFSCI_TOF
 #define NbTof       NUMBER_OF_SOFSCI_TOF
+#endif
 
 class TClonesArray;
 class R3BEventHeader;
@@ -102,8 +104,10 @@ class R3BSofSciOnlineSpectra : public FairTask
     // Canvas
     TCanvas* cSciMult[NbDetectors];
     TCanvas* cSciRawPos[NbDetectors];
+#ifdef NUMBER_OF_SOFSCI_TOF
     TCanvas* cSciRawTof[NbTof];
     TCanvas* cSciRawTofvsRawPos[NbTof];
+#endif
 
     // Histograms for Mapped data : Fine Time and Mult
     TH1I* fh1_finetime[NbDetectors * NbChannels];
@@ -111,10 +115,12 @@ class R3BSofSciOnlineSpectra : public FairTask
 
     // Histograms for PosRaw Data at Tcal and SingleTcal
     TH1F* fh1_RawPos_AtTcalMult1[NbDetectors];
+#ifdef NUMBER_OF_SOFSCI_TOF
     TH1D* fh1_RawTof_AtTcalMult1[NbTof];
     TH1D* fh1_RawTof_AtTcalMult1_wTref[NbTof];
     TH2D* fh2_RawTof_vs_RawPosStart_AtTcalMult1[NbTof];
     TH2D* fh2_RawTof_vs_RawPosStop_AtTcalMult1[NbTof];
+#endif
 
     //    TH1F * fh1_RawPos_AtSingleTcal[NbDetectors];
 

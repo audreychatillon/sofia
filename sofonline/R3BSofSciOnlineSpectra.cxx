@@ -168,6 +168,7 @@ InitStatus R3BSofSciOnlineSpectra::Init()
         cSciRawPos[i]->cd();
         fh1_RawPos_AtTcalMult1[i]->Draw("");
     }
+#ifdef NUMBER_OF_SOFSCI_TOF
   Int_t nTof=0;
   for (Int_t dstart = 0; dstart < NbDetectors-1 ; dstart++)
   {
@@ -211,6 +212,7 @@ InitStatus R3BSofSciOnlineSpectra::Init()
       nTof++;
     }  
   }
+#endif
 
     // Music Hit data vs SCI-RawPos
     TCanvas* cMusicZvsRawPos =
@@ -266,10 +268,12 @@ InitStatus R3BSofSciOnlineSpectra::Init()
         mainfolSci->Add(cSciMult[i]);
         mainfolSci->Add(cSciRawPos[i]);
     }
+#ifdef NUMBER_OF_SOFSCI_TOF
     for(Int_t i = 0; i < NbTof ; i++)
     {
 	mainfolSci->Add(cSciRawTof[i]);
     }
+#endif
     mainfolSci->Add(cMusicZvsRawPos);
     mainfolSci->Add(cMusicDTvsRawPos);
     mainfolSci->Add(cMwpc0vsRawPos);
@@ -295,6 +299,7 @@ void R3BSofSciOnlineSpectra::Reset_Histo()
         // === RAW POSITION === //
         fh1_RawPos_AtTcalMult1[i]->Reset();
     }
+#ifdef NUMBER_OF_SOFSCI_TOF
     for(Int_t i = 0; i<NbTof; i++)
     {
       // === RAW TIME_OF_FLIGHT === //
@@ -303,6 +308,7 @@ void R3BSofSciOnlineSpectra::Reset_Histo()
       fh2_RawTof_vs_RawPosStart_AtTcalMult1[i]->Reset();
       fh2_RawTof_vs_RawPosStop_AtTcalMult1[i]->Reset();
     }
+#endif
     fh2_MusZvsRawPos->Reset();
     fh2_MusDTvsRawPos->Reset();
     fh2_Mwpc0vsRawPos->Reset();
@@ -437,6 +443,7 @@ void R3BSofSciOnlineSpectra::Exec(Option_t* option)
                 }
             }
         }
+#ifdef NUMBER_OF_SOFSCI_DETECTORS
 	Int_t nTof=0;
 	Double_t iRawTof;
 	for(UShort_t dstart=0; dstart<NbDetectors-1; dstart++)
@@ -446,24 +453,25 @@ void R3BSofSciOnlineSpectra::Exec(Option_t* option)
 	    if( (mult[dstart*NbChannels] == 1) && (mult[dstart*NbChannels+1] == 1) &&
 		(mult[dstop*NbChannels] == 1) && (mult[dstop*NbChannels+1] == 1) )
 	    {
-	      iRawTof = 0.5*(iRawTimeNs[dstop+NbChannels]+iRawTimeNs[dstop*NbChannels+1]) -
-			0.5*(iRawTimeNs[dstart*NbChannels]+iRawTimeNs[dstart*NbChannels+1]) + 
-		  iRawTimeNs[dstart*NbChannels+2] - iRawTimeNs[dstop*NbChannels+2];
-	      fh1_RawTof_AtTcalMult1[nTof]->Fill(iRawTof); 
-	      fh2_RawTof_vs_RawPosStart_AtTcalMult1[nTof]->Fill(iRawTimeNs[dstart*NbChannels]-iRawTimeNs[dstart*NbChannels+1],iRawTof);
-	      fh2_RawTof_vs_RawPosStop_AtTcalMult1[nTof]->Fill(iRawTimeNs[dstop*NbChannels]-iRawTimeNs[dstop*NbChannels+1],iRawTof);
+	      fh1_RawTof_AtTcalMult1[nTof]->Fill( 
+		  0.5*(iRawTimeNs[dstop+NbChannels]+iRawTimeNs[dstop*NbChannels+1]) - 
+		  0.5*(iRawTimeNs[dstart*NbChannels]+iRawTimeNs[dstart*NbChannels+1]) 
+	      ); 
+	      
 	      if( (mult[dstart*NbChannels+2]==1) && (mult[dstop*NbChannels+2]==1))
 	      {
-		fh1_RawTof_AtTcalMult1_wTref[nTof]->Fill( 
-		  0.5*(iRawTimeNs[dstop+NbChannels]+iRawTimeNs[dstop*NbChannels+1]) - 
-		  0.5*(iRawTimeNs[dstart*NbChannels]+iRawTimeNs[dstart*NbChannels+1]) + 
-		  iRawTimeNs[dstart*NbChannels+2] - iRawTimeNs[dstop*NbChannels+2]
-		  ); 
+		iRawTof = 0.5*(iRawTimeNs[dstop+NbChannels]+iRawTimeNs[dstop*NbChannels+1]) -
+			  0.5*(iRawTimeNs[dstart*NbChannels]+iRawTimeNs[dstart*NbChannels+1]) + 
+			  iRawTimeNs[dstart*NbChannels+2] - iRawTimeNs[dstop*NbChannels+2];
+		fh1_RawTof_AtTcalMult1_wTref[nTof]->Fill(iRawTof); 
+		fh2_RawTof_vs_RawPosStart_AtTcalMult1[nTof]->Fill(iRawTimeNs[dstart*NbChannels]-iRawTimeNs[dstart*NbChannels+1],iRawTof);
+		fh2_RawTof_vs_RawPosStop_AtTcalMult1[nTof]->Fill(iRawTimeNs[dstop*NbChannels]-iRawTimeNs[dstop*NbChannels+1],iRawTof);
 	      }
 	      nTof++;
 	    }
 	  }
 	}
+#endif
     }
     fNEvents += 1;
 }
@@ -515,6 +523,7 @@ void R3BSofSciOnlineSpectra::FinishTask()
             fh1_RawPos_AtTcalMult1[i]->Write();
             cSciRawPos[i]->Write();
         }
+#ifdef NUMBER_OF_SOFSCI_DETECTORS
 	for (UShort_t i = 0; i<NbTof ; i++)
 	{
 	    fh1_RawTof_AtTcalMult1[i]->Write();
@@ -524,6 +533,7 @@ void R3BSofSciOnlineSpectra::FinishTask()
 	    fh2_RawTof_vs_RawPosStop_AtTcalMult1[i]->Write();
 	    cSciRawTofvsRawPos[i];
 	}
+#endif
         if (fMusHitItems)
         {
             fh2_MusZvsRawPos->Write();
