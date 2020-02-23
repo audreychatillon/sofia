@@ -443,7 +443,7 @@ void R3BSofSciOnlineSpectra::Exec(Option_t* option)
                 }
             }
         }
-#ifdef NUMBER_OF_SOFSCI_DETECTORS
+#ifdef NUMBER_OF_SOFSCI_TOF
 	Int_t nTof=0;
 	Double_t iRawTof;
 	for(UShort_t dstart=0; dstart<NbDetectors-1; dstart++)
@@ -523,7 +523,7 @@ void R3BSofSciOnlineSpectra::FinishTask()
             fh1_RawPos_AtTcalMult1[i]->Write();
             cSciRawPos[i]->Write();
         }
-#ifdef NUMBER_OF_SOFSCI_DETECTORS
+#ifdef NUMBER_OF_SOFSCI_TOF
 	for (UShort_t i = 0; i<NbTof ; i++)
 	{
 	    fh1_RawTof_AtTcalMult1[i]->Write();
