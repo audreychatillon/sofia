@@ -10,11 +10,9 @@
 #include "R3BSofToFWOnlineSpectra.h"
 #include "R3BEventHeader.h"
 #include "R3BSofMwpcCalData.h"
-#include "R3BSofSciSingleTcalData.h"
 #include "R3BSofToFWMappedData.h"
 #include "R3BSofToFWTcalData.h"
 #include "R3BSofSciTcalData.h"
-#include "R3BSofSciSingleTcalData.h"
 #include "R3BSofTwimMappedData.h"
 #include "R3BSofTwimHitData.h"
 #include "THttpServer.h"
@@ -48,7 +46,6 @@ R3BSofToFWOnlineSpectra::R3BSofToFWOnlineSpectra()
     , fMappedItemsToFW(NULL)
     , fTcalItemsToFW(NULL)
     , fTcalItemsSci(NULL)
-    , fSingleTcalItemsSci(NULL)
     , fMappedItemsTwim(NULL)
     , fHitItemsTwim(NULL)
     , fCalItemsMwpc(NULL)
@@ -63,7 +60,6 @@ R3BSofToFWOnlineSpectra::R3BSofToFWOnlineSpectra(const char* name, Int_t iVerbos
     , fMappedItemsToFW(NULL)
     , fTcalItemsToFW(NULL)
     , fTcalItemsSci(NULL)
-    , fSingleTcalItemsSci(NULL)
     , fMappedItemsTwim(NULL)
     , fHitItemsTwim(NULL)
     , fCalItemsMwpc(NULL)
@@ -82,8 +78,6 @@ R3BSofToFWOnlineSpectra::~R3BSofToFWOnlineSpectra()
         delete fTcalItemsToFW;
     if (fTcalItemsSci)
         delete fTcalItemsSci;
-    if (fSingleTcalItemsSci)
-        delete fSingleTcalItemsSci;
     if (fMappedItemsTwim)
         delete fMappedItemsTwim;
     if (fHitItemsTwim)
@@ -131,15 +125,6 @@ InitStatus R3BSofToFWOnlineSpectra::Init()
     // --- ---------------------------------- --- //
     fTcalItemsSci = (TClonesArray*)mgr->GetObject("SofSciTcalData");
     if (!fTcalItemsSci)
-    {
-        return kFATAL;
-    }
-
-    // --- ----------------------------------------- --- //
-    // --- get access to single tcal data of the SCI --- //
-    // --- ----------------------------------------- --- //
-    fSingleTcalItemsSci = (TClonesArray*)mgr->GetObject("SofSciSingleTcalData");
-    if (!fSingleTcalItemsSci)
     {
         return kFATAL;
     }
@@ -518,17 +503,6 @@ void R3BSofToFWOnlineSpectra::Exec(Option_t* option)
 	  TrawStart = 0.5 * ( iRawTimeNsSci[(ID_SOFSCI_CAVEC-1)*NUMBER_OF_SOFSCI_CHANNELS] +
 			      iRawTimeNsSci[(ID_SOFSCI_CAVEC-1)*NUMBER_OF_SOFSCI_CHANNELS+1]);
 	}
-        /*
-	if (fSingleTcalItemsSci && (fSingleTcalItemsSci->GetEntriesFast() == 1))
-        {
-            R3BSofSciSingleTcalData* hitsingletcalsci = (R3BSofSciSingleTcalData*)fSingleTcalItemsSci->At(0);
-            if (hitsingletcalsci)
-            {
-                TrawStart = hitsingletcalsci->GetRawTimeNs(ID_SOFSCI_CAVEC);
-            }
-        } // end of if mult=1 in the Start
-	*/
-
 
         // Get hit data Twim
         Double_t twimZ = 0.;
@@ -637,10 +611,6 @@ void R3BSofToFWOnlineSpectra::FinishEvent()
     {
         fTcalItemsSci->Clear();
     }
-    if (fSingleTcalItemsSci)
-    {
-        fSingleTcalItemsSci->Clear();
-    }
     if (fHitItemsTwim)
     {
         fHitItemsTwim->Clear();
@@ -681,11 +651,8 @@ void R3BSofToFWOnlineSpectra::FinishTask()
         for (UShort_t i = 0; i < NbDets; i++)
         {
             fh1_RawPos_AtTcalMult1[i]->Write();
-            if (fSingleTcalItemsSci)
-            {
-                cToFWRawTof[i]->Write();
-                fh1_RawTof_AtTcalMult1[i]->Write();
-            }
+             cToFWRawTof[i]->Write();
+             fh1_RawTof_AtTcalMult1[i]->Write();
         }
     }
 
