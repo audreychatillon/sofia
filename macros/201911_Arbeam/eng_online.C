@@ -23,18 +23,18 @@ void eng_online()
 
   // Create source using ucesb for input ------------------
   
-  TString filename = "--stream=lxir123:7803";
+  //TString filename = "--stream=lxir123:7803";
   //TString filename = "~/lmd/sofia2019/main0079_0001.lmd";
-  //TString filename = "/media/audrey/COURGE/SOFIA/ANALYSE/SOFIA3/data/main0028_0001.lmd";
+  TString filename = "/media/audrey/COURGE/SOFIA/ANALYSE/SOFIA3/data/201911_eng/main0052_0001.lmd";
 
-  TString outputFileName = "data_online.root";
+  TString outputFileName = "data_online_run52.root";
   //TString outputFileName = "../SofMacrosOutput/201911_online/data_online.root";
   
   TString ntuple_options = "RAW";
   TString ucesb_dir = getenv("UCESB_DIR");
-  TString ucesb_path = "/u/land/lynx.landexp/201911_eng/upexps/201911_eng2/201911_eng2 --allow-errors --input-buffer=100Mi";
+  //TString ucesb_path = "/u/land/lynx.landexp/201911_eng/upexps/201911_eng2/201911_eng2 --allow-errors --input-buffer=100Mi";
   //TString ucesb_path = "/u/land/sofia/unpacker/upexps/201911_eng2/201911_eng2 --allow-errors --input-buffer=100Mi";
-  //TString ucesb_path = ucesb_dir + "/../upexps/201911_eng2/201911_eng2 --allow-errors --input-buffer=100Mi";
+  TString ucesb_path = ucesb_dir + "/../upexps/201911_eng2/201911_eng2 --allow-errors --input-buffer=100Mi";
   ucesb_path.ReplaceAll("//","/");
   
   EXT_STR_h101 ucesb_struct;

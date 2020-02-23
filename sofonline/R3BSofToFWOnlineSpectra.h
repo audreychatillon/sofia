@@ -22,6 +22,10 @@
 #define NbDets NUMBER_OF_SOFTOFW_PLASTICS
 #define NbChs NUMBER_OF_SOFTOFW_PMTS_PER_PLASTIC
 
+#define NbSections 1
+#define NbAnodes 16
+
+
 class TClonesArray;
 class R3BEventHeader;
 
@@ -94,7 +98,9 @@ class R3BSofToFWOnlineSpectra : public FairTask
   private:
     TClonesArray* fMappedItemsToFW;    /**< Array with mapped items. */
     TClonesArray* fTcalItemsToFW;      /**< Array with tcal items. */
+    TClonesArray* fTcalItemsSci; /**< Array with single tcal items of Sci */
     TClonesArray* fSingleTcalItemsSci; /**< Array with single tcal items of Sci */
+    TClonesArray* fMappedItemsTwim;
     TClonesArray* fHitItemsTwim;       /**< Array with hit items of twim. */
     TClonesArray* fCalItemsMwpc;       /**< Array with cal items of mwpc3. */
     Float_t fTwimTofRangeMax;          // Range for Twim vs ToF histograms
@@ -113,6 +119,7 @@ class R3BSofToFWOnlineSpectra : public FairTask
     TCanvas* cTwimvsTof[NbDets];
     TCanvas* cMwpc3XvsTof;
     TCanvas* cMwpc3YvsPosTof[NbDets];
+    TCanvas* cTwimEsumVsTofRaw[NbDets];
 
     // Histograms for Mapped data : Fine Time and Mult
     TH1I* fh1_finetime[NbDets * NbChs];
@@ -129,6 +136,7 @@ class R3BSofToFWOnlineSpectra : public FairTask
 
     // Histograms for Twim vs ToFraw
     TH2F* fh2_Twim_Tof[NbDets];
+    TH2F* fh2_TwimEsum_TofRaw[NbDets];
 
     // Histograms for Mwpc3 vs ToF-plastic
     TH2F* fh2_Mwpc3X_Tof;
