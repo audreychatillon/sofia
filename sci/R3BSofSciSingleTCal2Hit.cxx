@@ -115,9 +115,11 @@ void R3BSofSciSingleTCal2Hit::Exec(Option_t* option)
             // AddHitData(1, calDat[i]->GetRawPosNs(1), calDat[i]->GetRawTofNs(1) );//S2-FRS
             AddHitData(2, calDat[i]->GetRawPosNs(2) * slope_calibs2, 0.); // S2-SOFIA
             // AddHitData(3, calDat[i]->GetRawPosNs(3), calDat[i]->GetRawTofNs(3) );//S8
+#ifdef NUMBER_OF_SOFSCI_TOF
             AddHitData(4,
                        calDat[i]->GetRawPosNs(4) * slope_calibcave + offset_calibcave,
                        calDat[i]->GetRawTofNs(4) + fTof + fOffsetTof); // Cave
+#endif
         }
 
     if (calDat)
