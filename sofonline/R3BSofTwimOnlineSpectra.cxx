@@ -209,7 +209,7 @@ InitStatus R3BSofTwimOnlineSpectra::Init()
 
         sprintf(Name3, "fh2_Twim_EsumvsDT_sec%d", i + 1);
         sprintf(Name4, "Twim: Esum vs DT for sec%d", i + 1);
-        fh2_twim_EneRawSumVsDriftTime[i] = new TH2F(Name3, Name4, 1200, 1, 25000, 2192, 0, 8192);
+        fh2_twim_EneRawSumVsDriftTime[i] = new TH2F(Name3, Name4, 1200, 1, 25000, 2048, 0, 8192);
         fh2_twim_EneRawSumVsDriftTime[i]->GetXaxis()->SetTitle("Drift time [channels, 100ps TDC resolution]");
         fh2_twim_EneRawSumVsDriftTime[i]->GetYaxis()->SetTitle("Energy Sum [channels]");
         fh2_twim_EneRawSumVsDriftTime[i]->GetYaxis()->SetTitleOffset(1.1);
@@ -327,7 +327,7 @@ InitStatus R3BSofTwimOnlineSpectra::Init()
 
     // TWIM: Map data for Esum1 vs Esum2
     cTwimMap_ESum2 = new TCanvas("twim_E1vsE2", "twim_E1vsE2", 10, 10, 800, 700);
-    fh2_twim_ESum = new TH2F("fh2_twim_ESum", "twim: ESum1 vs Esum2", 2192, 0, 8192, 2192, 0, 8192);
+    fh2_twim_ESum = new TH2F("fh2_twim_ESum", "twim: ESum1 vs Esum2", 2048, 0, 8192, 2048, 0, 8192);
     fh2_twim_ESum->GetXaxis()->SetTitle("Energy1 [channels]");
     fh2_twim_ESum->GetYaxis()->SetTitle("Energy2 [channels]");
     fh2_twim_ESum->GetYaxis()->SetTitleOffset(1.1);
@@ -347,7 +347,7 @@ InitStatus R3BSofTwimOnlineSpectra::Init()
     {
         sprintf(Name1, "fh2_twim_ESum_vs_diffDT_Sec_%d", i + 1);
         sprintf(Name2, "TWIM: ESum vs diffDT in section %d", i + 1);
-        fh2_twim_ESum_vs_diffDT[i] = new TH2F(Name1, Name2, 2000, -2000, 2000, 2192, 0, 8192);
+        fh2_twim_ESum_vs_diffDT[i] = new TH2F(Name1, Name2, 2000, -2000, 2000, 2048, 0, 8192);
         fh2_twim_ESum_vs_diffDT[i]->GetXaxis()->SetTitle("DT difference [channels]");
         fh2_twim_ESum_vs_diffDT[i]->GetYaxis()->SetTitle("Energy Sum [channels]");
         fh2_twim_ESum_vs_diffDT[i]->GetYaxis()->SetTitleOffset(1.1);
@@ -418,7 +418,7 @@ InitStatus R3BSofTwimOnlineSpectra::Init()
 
     // Hit data
     TCanvas* cTwim_Z = new TCanvas("Twim_charge_z", "Twim: Charge Z", 10, 10, 800, 700);
-    fh1_Twimhit_z = new TH1F("fh1_Twim_charge_z", "Twim: Charge Z", 1200, 6, 38);
+    fh1_Twimhit_z = new TH1F("fh1_Twim_charge_z", "Twim: Charge Z", 2000, 0, 10);
     fh1_Twimhit_z->GetXaxis()->SetTitle("Charge (Z)");
     fh1_Twimhit_z->GetYaxis()->SetTitle("Counts");
     fh1_Twimhit_z->GetYaxis()->SetTitleOffset(1.1);
@@ -449,7 +449,7 @@ InitStatus R3BSofTwimOnlineSpectra::Init()
 
     TCanvas* cTwim_zvstheta = new TCanvas("Twim_charge_vs_theta", "Twim: Charge Z vs #theta_{XZ}", 10, 10, 800, 700);
     fh2_Twimhit_zvstheta =
-        new TH2F("fh2_Twim_Charge_Z_vs_theta", "Twim: Charge Z vs #theta_{XZ}", 900, -40, 40, 1000, 6, 38);
+        new TH2F("fh2_Twim_Charge_Z_vs_theta", "Twim: Charge Z vs #theta_{XZ}", 900, -40, 40, 1000, 0, 10);
     fh2_Twimhit_zvstheta->GetXaxis()->SetTitle("#theta_{XZ} [mrad]");
     fh2_Twimhit_zvstheta->GetYaxis()->SetTitle("Charge (Z)");
     fh2_Twimhit_zvstheta->GetYaxis()->SetTitleOffset(1.1);
@@ -476,7 +476,7 @@ InitStatus R3BSofTwimOnlineSpectra::Init()
     fh2_TwimTheta_vs_mwpc3x->Draw("colz");
 
     cTwimZ_vs_mwpc3x = new TCanvas("Twim_Z_vs_mwpc3x", "Twim: Z vs Mwpc3-X", 10, 10, 800, 700);
-    fh2_TwimZ_vs_mwpc3x = new TH2F("fh2_TwiwZ_vs_mwpc3", "Twim: Z vs Mwpc3-X", 800, -400, 400, 700, 6, 38);
+    fh2_TwimZ_vs_mwpc3x = new TH2F("fh2_TwiwZ_vs_mwpc3", "Twim: Z vs Mwpc3-X", 800, -400, 400, 1000, 0, 10);
     fh2_TwimZ_vs_mwpc3x->GetXaxis()->SetTitle("(Wixhausen)<---  Mwpc3-X [mm]  ---> (Messel)");
     fh2_TwimZ_vs_mwpc3x->GetYaxis()->SetTitle("Charge Z");
     fh2_TwimZ_vs_mwpc3x->GetYaxis()->SetTitleOffset(1.1);
