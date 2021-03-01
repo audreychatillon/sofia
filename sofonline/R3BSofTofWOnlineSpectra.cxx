@@ -10,6 +10,7 @@
 #include "R3BSofTofWOnlineSpectra.h"
 #include "R3BEventHeader.h"
 #include "R3BSofMwpcCalData.h"
+#include "R3BSofMwpcHitData.h"
 #include "R3BSofSciSingleTcalData.h"
 #include "R3BSofTofWMappedData.h"
 #include "R3BSofTofWSingleTcalData.h"
@@ -48,6 +49,7 @@ R3BSofTofWOnlineSpectra::R3BSofTofWOnlineSpectra()
     , fSingleTcalItemsSci(NULL)
     , fHitItemsTwim(NULL)
     , fCalItemsMwpc(NULL)
+    , fHitItemsMwpc(NULL)
     , fTwimTofRangeMax(-65.)
     , fTwimTofRangeMin(-87.)
     , fIdSofSciCaveC(1)
@@ -63,6 +65,7 @@ R3BSofTofWOnlineSpectra::R3BSofTofWOnlineSpectra(const char* name, Int_t iVerbos
     , fSingleTcalItemsSci(NULL)
     , fHitItemsTwim(NULL)
     , fCalItemsMwpc(NULL)
+    , fHitItemsMwpc(NULL)
     , fTwimTofRangeMax(-65.)
     , fTwimTofRangeMin(-87.)
     , fIdSofSciCaveC(1)
@@ -85,6 +88,8 @@ R3BSofTofWOnlineSpectra::~R3BSofTofWOnlineSpectra()
         delete fHitItemsTwim;
     if (fCalItemsMwpc)
         delete fCalItemsMwpc;
+    if (fHitItemsMwpc)
+        delete fHitItemsMwpc;
 }
 
 InitStatus R3BSofTofWOnlineSpectra::Init()
@@ -148,6 +153,11 @@ InitStatus R3BSofTofWOnlineSpectra::Init()
     fCalItemsMwpc = (TClonesArray*)mgr->GetObject("Mwpc3CalData");
     if (!fCalItemsMwpc)
         LOG(WARNING) << "R3BSofTofWOnlineSpectra: Mwpc3CalData not found";
+    
+    // get access to hit data of the MWPC3
+    fHitItemsMwpc = (TClonesArray*)mgr->GetObject("Mwpc3HitData");
+    if (!fHitItemsMwpc)
+        LOG(WARNING) << "R3BSofTofWOnlineSpectra: Mwpc3HitData not found";
 
     // --- ------------------------------- --- //
     // --- Create histograms for detectors --- //
@@ -300,18 +310,34 @@ InitStatus R3BSofTofWOnlineSpectra::Init()
     sprintf(Name1, "Mwpc3X_vs_ToF_Plastic");
     sprintf(Name2, "Mwpc3X vs ToF-Plastic number");
     cMwpc3XvsTof = new TCanvas(Name1, Name2, 10, 10, 1000, 900);
+    cMwpc3XvsTof->Divide(2,1);
+
+    sprintf(Name1, "fh2_Mwpc3Xpad_vs_ToF_Plastic");
+    sprintf(Name2, "Mwpc3Xpad vs ToF for plastic number");
+    fh2_Mwpc3Xpad_Tof = new TH2F(Name1, Name2, 28 * 8, 0.5, 28.5, 288 * 8, 0.5, 288.5);
+    fh2_Mwpc3Xpad_Tof->GetXaxis()->SetTitle("TofW-Plastic number [1-28]");
+    fh2_Mwpc3Xpad_Tof->GetYaxis()->SetTitle("MWPC3-X [pads]");
+    fh2_Mwpc3Xpad_Tof->GetXaxis()->CenterTitle(true);
+    fh2_Mwpc3Xpad_Tof->GetYaxis()->CenterTitle(true);
+    fh2_Mwpc3Xpad_Tof->GetXaxis()->SetLabelSize(0.045);
+    fh2_Mwpc3Xpad_Tof->GetXaxis()->SetTitleSize(0.045);
+    fh2_Mwpc3Xpad_Tof->GetYaxis()->SetLabelSize(0.045);
+    fh2_Mwpc3Xpad_Tof->GetYaxis()->SetTitleSize(0.045);
+    cMwpc3XvsTof->cd(1);
+    fh2_Mwpc3Xpad_Tof->Draw("col");
+
     sprintf(Name1, "fh2_Mwpc3X_vs_ToF_Plastic");
     sprintf(Name2, "Mwpc3X vs ToF for plastic number");
-    fh2_Mwpc3X_Tof = new TH2F(Name1, Name2, 28 * 8, 0.5, 28.5, 288 * 8, 0.5, 288.5);
+    fh2_Mwpc3X_Tof = new TH2F(Name1, Name2, 28 * 8, 0.5, 28.5, 900, -450, 450);
     fh2_Mwpc3X_Tof->GetXaxis()->SetTitle("TofW-Plastic number [1-28]");
-    fh2_Mwpc3X_Tof->GetYaxis()->SetTitle("MWPC3-X [pads]");
+    fh2_Mwpc3X_Tof->GetYaxis()->SetTitle("MWPC3-X [mm]");
     fh2_Mwpc3X_Tof->GetXaxis()->CenterTitle(true);
     fh2_Mwpc3X_Tof->GetYaxis()->CenterTitle(true);
     fh2_Mwpc3X_Tof->GetXaxis()->SetLabelSize(0.045);
     fh2_Mwpc3X_Tof->GetXaxis()->SetTitleSize(0.045);
     fh2_Mwpc3X_Tof->GetYaxis()->SetLabelSize(0.045);
     fh2_Mwpc3X_Tof->GetYaxis()->SetTitleSize(0.045);
-    cMwpc3XvsTof->cd();
+    cMwpc3XvsTof->cd(2);
     fh2_Mwpc3X_Tof->Draw("col");
 
     for (Int_t i = 0; i < NbDets; i++)
@@ -409,6 +435,7 @@ void R3BSofTofWOnlineSpectra::Reset_Histo()
         fh2_Mwpc3Y_PosTof[i]->Reset();
     }
 
+    fh2_Mwpc3Xpad_Tof->Reset();
     fh2_Mwpc3X_Tof->Reset();
 }
 
@@ -516,8 +543,8 @@ void R3BSofTofWOnlineSpectra::Exec(Option_t* option)
         }
 
         // Get cal data MWPC3
-        Double_t mwpc3x = -1., qmax = -100.;
-        Double_t mwpc3y = -1., qmay = -100.;
+        Double_t mwpc3xpad = -1., qmax = -100.;
+        Double_t mwpc3ypad = -1., qmay = -100.;
         if (fCalItemsMwpc && fCalItemsMwpc->GetEntriesFast() > 0)
         {
             nHits = fCalItemsMwpc->GetEntriesFast();
@@ -528,14 +555,30 @@ void R3BSofTofWOnlineSpectra::Exec(Option_t* option)
                     continue;
                 if (hit->GetQ() > qmax && hit->GetPlane() == 1)
                 {
-                    mwpc3x = hit->GetPad();
+                    mwpc3xpad = hit->GetPad();
                     qmax = hit->GetQ();
                 }
                 if (hit->GetQ() > qmay && hit->GetPlane() == 3)
                 {
-                    mwpc3y = hit->GetPad();
+                    mwpc3ypad = hit->GetPad();
                     qmay = hit->GetQ();
                 }
+            }
+        }
+        
+	// Get hit data MWPC3
+        Double_t mwpc3x = -1.; 
+        Double_t mwpc3y = -1.;
+        if (fHitItemsMwpc && fHitItemsMwpc->GetEntriesFast() > 0)
+        {
+            nHits = fHitItemsMwpc->GetEntriesFast();
+            for (Int_t ihit = 0; ihit < nHits; ihit++)
+            {
+                R3BSofMwpcHitData* hit = (R3BSofMwpcHitData*)fHitItemsMwpc->At(ihit);
+                if (!hit)
+                    continue;
+                mwpc3x = hit->GetX();
+                mwpc3y = hit->GetY();
             }
         }
 
@@ -563,13 +606,14 @@ void R3BSofTofWOnlineSpectra::Exec(Option_t* option)
                     {
                         fh2_Twim_Tof[i]->Fill(tofw, twimZ);
                     }
-                    if (mwpc3x > 0)
+                    if (mwpc3xpad > 0)
                     {
-                        fh2_Mwpc3X_Tof->Fill(i + gRandom->Uniform(-0.5, 0.5), mwpc3x + gRandom->Uniform(-0.5, 0.5));
+                        fh2_Mwpc3Xpad_Tof->Fill(i + gRandom->Uniform(-0.5, 0.5), mwpc3xpad + gRandom->Uniform(-0.5, 0.5));
+                        fh2_Mwpc3X_Tof->Fill(i + gRandom->Uniform(-0.5, 0.5), mwpc3x);
                     }
-                    if (mwpc3y > 0)
+                    if (mwpc3ypad > 0)
                     {
-                        fh2_Mwpc3Y_PosTof[i]->Fill(tofpos, mwpc3y + gRandom->Uniform(-0.5, 0.5));
+                        fh2_Mwpc3Y_PosTof[i]->Fill(tofpos, mwpc3ypad + gRandom->Uniform(-0.5, 0.5));
                     }
                 }
             } // end of if mult=1 in the plastic
@@ -600,6 +644,10 @@ void R3BSofTofWOnlineSpectra::FinishEvent()
     if (fCalItemsMwpc)
     {
         fCalItemsMwpc->Clear();
+    }
+    if (fHitItemsMwpc)
+    {
+        fHitItemsMwpc->Clear();
     }
 }
 

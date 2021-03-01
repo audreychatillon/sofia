@@ -98,6 +98,7 @@ class R3BSofTofWOnlineSpectra : public FairTask
     TClonesArray* fSingleTcalItemsSci;  /**< Array with single tcal items of Sci */
     TClonesArray* fHitItemsTwim;        /**< Array with hit items of twim. */
     TClonesArray* fCalItemsMwpc;        /**< Array with cal items of mwpc3. */
+    TClonesArray* fHitItemsMwpc;        /**< Array with cal items of mwpc3. */
     Float_t fTwimTofRangeMax;           // Range for Twim vs ToF histograms
     Float_t fTwimTofRangeMin;
     Int_t fIdSofSciCaveC;
@@ -136,6 +137,7 @@ class R3BSofTofWOnlineSpectra : public FairTask
     TH2F* fh2_Twim_Tof[NbDets];
 
     // Histograms for Mwpc3 vs ToF-plastic
+    TH2F* fh2_Mwpc3Xpad_Tof;
     TH2F* fh2_Mwpc3X_Tof;
     TH2F* fh2_Mwpc3Y_PosTof[NbDets];
 
