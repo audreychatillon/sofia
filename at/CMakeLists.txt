@@ -24,13 +24,7 @@ link_directories( ${LINK_DIRECTORIES})
 set(SRCS
 #Put here your sourcefiles
 R3BSofAT.cxx
-#R3BSofATHitPar.cxx
-#R3BSofATCalPar.cxx
-#R3BSofATMappedPar.cxx
-#R3BSofATCal2Hit.cxx
-#R3BSofATMapped2Cal.cxx
-#R3BSofATCal2HitPar.cxx
-#R3BSofATMapped2CalPar.cxx
+R3BSofAtContFact.cxx
 )
 
 # fill list of header files from list of source files
