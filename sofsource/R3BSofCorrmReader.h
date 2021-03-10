@@ -1,0 +1,40 @@
+#ifndef R3BSOFCORRMREADER_H
+#define R3BSOFCORRMREADER_H
+
+#include "R3BReader.h"
+#include "TClonesArray.h"
+
+struct EXT_STR_h101_SOFCORRM_t;
+typedef struct EXT_STR_h101_SOFCORRM_t EXT_STR_h101_SOFCORRM;
+class FairLogger;
+
+class R3BSofCorrmReader : public R3BReader
+{
+  public:
+    R3BSofCorrmReader(EXT_STR_h101_SOFCORRM*, UInt_t);
+    R3BSofCorrmReader(EXT_STR_h101_SOFCORRM*, UInt_t, Int_t);
+    ~R3BSofCorrmReader();
+
+    Bool_t Init(ext_data_struct_info*);
+    Bool_t Read();
+    void Reset();
+
+    /** Accessor to select online mode **/
+    void SetOnline(Bool_t option) { fOnline = option; }
+
+  private:
+    /* Reader specific data structure from ucesb */
+    EXT_STR_h101_SOFCORRM* fData;
+    /* Data offset */
+    UInt_t fOffset;
+    // Don't store data for online
+    Bool_t fOnline;
+    /* the structs of type R3BSofCorrmMapped Item */
+    TClonesArray* fArray; /**< Output array. */
+    UInt_t fNumEntries;
+
+  public:
+    ClassDef(R3BSofCorrmReader, 0);
+};
+
+#endif
