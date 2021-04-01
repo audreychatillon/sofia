@@ -40,7 +40,7 @@ typedef struct EXT_STR_h101_t
 
 		EXT_STR_h101_SOFCORRM_onion_t corrm;
 		EXT_STR_h101_SOFCORRV_onion_t corrv;
-
+		EXT_STR_h101_VFTX_TR_onion_t  vftxtr;
 } EXT_STR_h101;
 
 void main_online()
@@ -79,8 +79,9 @@ void main_online()
         sofiaWR_SE = 0xe00;
         sofiaWR_ME = 0xf00;
 
+				filename = "~/data/s455/raw/main0290_0001.lmd";
         //filename = "--stream=lxlanddaq01:9000"; // 9000 is for stitched events 
-        filename = "--stream=lxlanddaq01:9100"; // 9100 is for raw events (needed for multi-events unpacking)
+        //filename = "--stream=lxlanddaq01:9100"; // 9100 is for raw events (needed for multi-events unpacking)
 
         TString outputpath = "~/data/s455/root-online/";
         //TString outputpath = "/d/land5/202103_s455/rootfiles/sofia/";
@@ -144,6 +145,7 @@ void main_online()
 		// --- Correlation signals between the different DAQ subsystems ---------------------
 		Bool_t fCorrm = true;     // correlation and trigger signals on sofia_mesy at cave C
 		Bool_t fCorrv = true;     // correlation signal on sofia_vftx at cave C
+		Bool_t fVftxtr = true;    // time of the master start distributed to the VFTX modules
 
     // Calibration files ------------------------------------
     // Parameters for CALIFA mapping
@@ -186,7 +188,7 @@ void main_online()
 
 		R3BSofCorrmReader* unpackcorrm;
 		R3BSofCorrvReader* unpackcorrv;
-
+		R3BVftxTrigReader* unpackvftxtr;
 
     if (fFrsTpcs)
       unpackfrs= new R3BFrsReaderNov19((EXT_STR_h101_FRS*)&ucesb_struct.frs,
@@ -252,6 +254,8 @@ void main_online()
 		if(fCorrv)
 			unpackcorrv = new R3BSofCorrvReader((EXT_STR_h101_SOFCORRV*)&ucesb_struct.corrv, offsetof(EXT_STR_h101,corrv));
 
+		if(fVftxtr)
+			unpackvftxtr = new R3BVftxTrigReader((EXT_STR_h101_VFTX_TR*)&ucesb_struct.vftxtr, offsetof(EXT_STR_h101,vftxtr));
 
     // Add readers ------------------------------------------
     source->AddReader(new R3BUnpackReader(&ucesb_struct.unpack,offsetof(EXT_STR_h101, unpack)));
@@ -343,14 +347,17 @@ void main_online()
 			unpackcorrv->SetOnline(NOTstoremappeddata);
 			source->AddReader(unpackcorrv);
 		}
-
+		if(fVftxtr)
+		{
+			unpackvftxtr->SetOnline(NOTstoremappeddata);
+			source->AddReader(unpackvftxtr);
+		}
     // Create online run ------------------------------------
     FairRunOnline* run = new FairRunOnline(source);
     run->SetRunId(fRunId);
     run->SetSink(new FairRootFileSink(outputFilename));
     run->ActivateHttpServer(refresh, port);
-    run->GetHttpServer()->CreateEngine(TString::Format("fastcgi:%d",
-	1000 + port));
+    run->GetHttpServer()->CreateEngine(TString::Format("fastcgi:%d",1000 + port));
 
     // Runtime data base ------------------------------------
     FairRuntimeDb* rtdb = run->GetRuntimeDb();
