@@ -46,7 +46,7 @@ R3BSofCorrOnlineSpectra::R3BSofCorrOnlineSpectra()
     , fTrefId_Corrv(2)
     , fNEvents(0)
 {
-    fNsPerBin_Corrv = (fLastX_Corrv - fFirstX_Corrv) / 5.;
+    fNsPerBin_Corrv = 5. / (fLastX_Corrv - fFirstX_Corrv) ;
 }
 
 R3BSofCorrOnlineSpectra::R3BSofCorrOnlineSpectra(const char* name, Int_t iVerbose)
@@ -59,7 +59,7 @@ R3BSofCorrOnlineSpectra::R3BSofCorrOnlineSpectra(const char* name, Int_t iVerbos
     , fTrefId_Corrv(6)
     , fNEvents(0)
 {
-    fNsPerBin_Corrv = (fLastX_Corrv - fFirstX_Corrv) / 5.;
+    fNsPerBin_Corrv = 5. / (fLastX_Corrv - fFirstX_Corrv);
 }
 
 R3BSofCorrOnlineSpectra::~R3BSofCorrOnlineSpectra()
