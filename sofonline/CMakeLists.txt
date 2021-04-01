@@ -68,6 +68,7 @@ R3BSofTrackingOnlineSpectra.cxx
 R3BSofTrackingFissionOnlineSpectra.cxx
 R3BSofScalersOnlineSpectra.cxx
 R3BSofCorrOnlineSpectra.cxx
+R3BVftxTrigOnlineSpectra.cxx
 )
 
 # fill list of header files from list of source files

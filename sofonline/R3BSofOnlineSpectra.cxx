@@ -15,6 +15,7 @@
 #include "R3BMusicOnlineSpectra.h"
 #include "R3BSofAtOnlineSpectra.h"
 #include "R3BSofCorrOnlineSpectra.h"
+#include "R3BVftxTrigOnlineSpectra.h"
 #include "R3BSofFrsOnlineSpectra.h"
 #include "R3BSofMwpcCorrelationOnlineSpectra.h"
 #include "R3BSofMwpcOnlineSpectra.h"
@@ -90,6 +91,7 @@ R3BSofOnlineSpectra::R3BSofOnlineSpectra()
     , fTrackOnline(NULL)
     , fTrackFFOnline(NULL)
     , fCorrOnline(NULL)
+    , fVftxTrOnline(NULL)
     , fWRItemsMaster(NULL)
     , fWRItemsSofia(NULL)
     , fWRItemsCalifa(NULL)
@@ -130,6 +132,7 @@ R3BSofOnlineSpectra::R3BSofOnlineSpectra(const TString& name, Int_t iVerbose)
     , fTrackOnline(NULL)
     , fTrackFFOnline(NULL)
     , fCorrOnline(NULL)
+    , fVftxTrOnline(NULL)
     , fWRItemsMaster(NULL)
     , fWRItemsSofia(NULL)
     , fWRItemsCalifa(NULL)
@@ -217,10 +220,15 @@ InitStatus R3BSofOnlineSpectra::Init()
         LOG(WARNING) << "R3BSofOnlineSpectra::WRS8Data not found";
     }
 
-    // Looking Correlation of DAQ subsystem online
+    // Looking at Correlation of DAQ subsystem online
     fCorrOnline = (R3BSofCorrOnlineSpectra*)FairRunOnline::Instance()->GetTask("SofCorrOnlineSpectra");
     if (!fCorrOnline)
         LOG(WARNING) << "R3BSofOnlineSpectra::SofCorrOnlineSpectra not found";
+
+    // Looking at offset in position and Tof from VFTX while restarting DAQ
+    fVftxTrOnline = (R3BVftxTrigOnlineSpectra*)FairRunOnline::Instance()->GetTask("VftxTrigOnlineSpectra");
+    if (!fVftxTrOnline)
+        LOG(WARNING) << "R3BSofOnlineSpectra::VftxTrigOnlineSpectra not found";
 
     // Looking for AT online
     fAtOnline = (R3BSofAtOnlineSpectra*)FairRunOnline::Instance()->GetTask("SofAtOnlineSpectra");
@@ -595,6 +603,9 @@ void R3BSofOnlineSpectra::Reset_GENERAL_Histo()
     // Reset Corr histograms if they exist somewhere
     if (fCorrOnline)
         fCorrOnline->Reset_Histo();
+    // Reset Vftx trigger time histograms if they exist somewhere
+    if (fVftxTrOnline)
+        fVftxTrOnline->Reset_Histo();
 }
 
 void R3BSofOnlineSpectra::Exec(Option_t* option)

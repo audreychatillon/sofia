@@ -792,6 +792,15 @@ void main_online()
 			run->AddTask(corronline);
 		}
 
+		if (fVftxtr)
+		{
+			R3BVftxTrigOnlineSpectra* vftxtronline = new R3BVftxTrigOnlineSpectra();
+			vftxtronline->SetIdFirstModuleS2(1);
+			vftxtronline->SetIdFirstModuleCaveC(3);
+			vftxtronline->SetNumModulesS2(2);
+			vftxtronline->SetNumModulesCaveC(4);
+			run->AddTask(vftxtronline);
+		}
 
     R3BSofOnlineSpectra* sofonline = new R3BSofOnlineSpectra();
     run->AddTask(sofonline);

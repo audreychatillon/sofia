@@ -41,6 +41,7 @@ class R3BSofFrsOnlineSpectra;
 class R3BSofTrackingOnlineSpectra;
 class R3BSofTrackingFissionOnlineSpectra;
 class R3BSofCorrOnlineSpectra;
+class R3BVftxTrigOnlineSpectra;
 
 /**
  * This taks reads General SOFIA data and plots online histograms
@@ -142,6 +143,7 @@ class R3BSofOnlineSpectra : public FairTask
     R3BSofTrackingOnlineSpectra* fTrackOnline;
     R3BSofTrackingFissionOnlineSpectra* fTrackFFOnline;
     R3BSofCorrOnlineSpectra* fCorrOnline;
+    R3BVftxTrigOnlineSpectra* fVftxTrOnline;
 
     // Canvas
     TCanvas *cTrigger, *cWr, *cWrs;
