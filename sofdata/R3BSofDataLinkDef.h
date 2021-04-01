@@ -45,5 +45,6 @@
 
 #pragma link C++ class R3BSofCorrmMappedData + ;
 #pragma link C++ class R3BSofCorrvMappedData + ;
+#pragma link C++ class R3BVftxTrigMappedData + ;
 
 #endif
