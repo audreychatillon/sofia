@@ -78,7 +78,7 @@ void main_online()
       IdS8 = 3;
       sofiaWR = 0xe00;
       
-      filename = "--stream=lxir123:7803";
+      //filename = "--stream=lxir123:7803";
 			// 86Kr run237 
       //filename = "~/data/s467/main0237*.lmd";
       // 86Kr run239
@@ -86,7 +86,7 @@ void main_online()
       // 86Kr run242
       //filename = "~/data/main0242*.lmd";
       // 50Ca
-      //filename = "~/lmd/s467/main0*.lmd";
+      filename = "~/data/s467/main0*.lmd";
       outputFilename = "data_s467_online.root";
       
       upexps_dir = ucesb_dir + "/../upexps/";                      // for local computers
@@ -192,7 +192,7 @@ void main_online()
     {
       unpacksci = new R3BSofSciReader((EXT_STR_h101_SOFSCI_t*)&ucesb_struct.sci, offsetof(EXT_STR_h101, sci),NumSofSci);
       unpackWRMaster = new R3BWhiterabbitMasterReader((EXT_STR_h101_WRMASTER*)&ucesb_struct.wrmaster, offsetof(EXT_STR_h101, wrmaster), 0x300);
-      unpackWRSofia = new R3BSofWhiterabbitReader((EXT_STR_h101_WRSOFIA*)&ucesb_struct.wrsofia, offsetof(EXT_STR_h101, wrsofia), sofiaWR);
+      unpackWRSofia = new R3BSofWhiterabbitReader((EXT_STR_h101_WRSOFIA*)&ucesb_struct.wrsofia, offsetof(EXT_STR_h101, wrsofia), sofiaWR,0);
     }
 
     if (fAms)
