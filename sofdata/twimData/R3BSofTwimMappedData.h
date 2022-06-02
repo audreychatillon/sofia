@@ -28,7 +28,7 @@ class R3BSofTwimMappedData : public TObject
      *@param dtime    Time [channels]
      *@param eLoss    Energy deposit [channels]
      **/
-    R3BSofTwimMappedData(UInt_t secID, UInt_t anodeID, Int_t time, Int_t energy, Bool_t pu, Bool_t ov);
+    R3BSofTwimMappedData(Int_t secID, Int_t anodeID, Int_t time, Int_t energy, Bool_t pu, Bool_t ov);
 
     /** Destructor **/
     virtual ~R3BSofTwimMappedData() {}

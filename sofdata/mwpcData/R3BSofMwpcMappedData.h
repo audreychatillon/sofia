@@ -14,7 +14,7 @@ class R3BSofMwpcMappedData : public TObject
      *@param pad     Pad number
      *@param charge  Charge of each pad [channels]
      **/
-    R3BSofMwpcMappedData(UShort_t plane, UShort_t pad, UShort_t charge);
+    R3BSofMwpcMappedData(Int_t plane, Int_t pad, Int_t charge);
 
     /** Destructor **/
     virtual ~R3BSofMwpcMappedData() {}
