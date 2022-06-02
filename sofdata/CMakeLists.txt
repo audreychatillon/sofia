@@ -10,6 +10,8 @@ ${R3BROOT_SOURCE_DIR}/r3bdata/neulandData
 ${R3BSOF_SOURCE_DIR}/sofdata
 ${R3BSOF_SOURCE_DIR}/sofdata/atData
 ${R3BSOF_SOURCE_DIR}/sofdata/sciData
+${R3BSOF_SOURCE_DIR}/sofdata/mwpcData
+${R3BSOF_SOURCE_DIR}/sofdata/twimData
 ${R3BSOF_SOURCE_DIR}/sofdata/trimData
 ${R3BSOF_SOURCE_DIR}/sofdata/tofwData
 ${R3BSOF_SOURCE_DIR}/sofdata/frsData
@@ -26,6 +28,8 @@ link_directories( ${LINK_DIRECTORIES})
 
 set(SRCS
 trimData/R3BSofTrimPoint.cxx
+mwpcData/R3BSofMwpcMappedData.cxx
+twimData/R3BSofTwimMappedData.cxx
 trimData/R3BSofTrimMappedData.cxx
 trimData/R3BSofTrimCalData.cxx
 trimData/R3BSofTrimHitData.cxx
